@@ -8,7 +8,7 @@ router.get('/', function (req, res, next) {
 
 /* GET specific comment. */
 router.get('/:commentid', function (req, res, next) {
-    res.send('NOT CREATED - COMMENT GET ROUTE');
+    res.send('NOT CREATED - COMMENT GET ROUTE FOR COMMENTID');
 });
 
 module.exports = router;

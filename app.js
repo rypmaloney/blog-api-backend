@@ -3,6 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const bcryptjs = require('bcryptjs');
+require('./passport');
 
 require('dotenv').config();
 const mongoose = require('mongoose');
@@ -12,6 +16,7 @@ var usersRouter = require('./routes/users');
 const postRouter = require('./routes/posts');
 const commentRounter = require('./routes/comments');
 const adminRounter = require('./routes/admin');
+const authRouter = require('./routes/auth');
 
 //MongoDB connection
 const mongoDb = `${process.env.DB_URI}`;
@@ -37,8 +42,16 @@ app.use('/api/users', usersRouter);
 app.use('/api/posts/', postRouter);
 app.use('/posts/:postid/comments', commentRounter);
 
-//All CMS routes to display backend views and
-app.use('/admin/', adminRounter);
+//All CMS routes to display backend views
+//Use jwt passport strategy on /admin/ route -> must use bearer token on request for this route
+//-- access from local storage
+app.use(
+    '/manage/',
+    passport.authenticate('jwt', { session: false }),
+    adminRounter
+);
+//Login and sign up routes
+app.use('/admin/', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

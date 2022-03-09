@@ -20,4 +20,4 @@ postSchema.virtual('prettyDate').get(function () {
     return this.date.toDateString();
 });
 
-module.exports = mongoose.model('post', messageSchema);
+module.exports = mongoose.model('post', postSchema);
