@@ -4,11 +4,20 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+require('dotenv').config();
+const mongoose = require('mongoose');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const postRouter = require('./routes/posts');
 const commentRounter = require('./routes/comments');
 const adminRounter = require('./routes/admin');
+
+//MongoDB connection
+const mongoDb = `${process.env.DB_URI}`;
+mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'mongo connection error'));
 
 var app = express();
 
