@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const postRouter = require('./routes/posts');
 const commentRounter = require('./routes/comments');
+const adminRounter = require('./routes/admin');
 
 var app = express();
 
@@ -22,9 +23,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/posts/', postRouter);
+//API Routes: these routes will be accessed by the front end app
+app.use('/api/users', usersRouter);
+app.use('/api/posts/', postRouter);
 app.use('/posts/:postid/comments', commentRounter);
+
+//All CMS routes to display backend views and
+app.use('/admin/', adminRounter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
