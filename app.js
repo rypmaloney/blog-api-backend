@@ -1,17 +1,20 @@
+require('./passport');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const bcryptjs = require('bcryptjs');
 
 require('dotenv').config();
 const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-const postRouter = require('./routes/posts');
-const commentRounter = require('./routes/comments');
+var apiRouter = require('./routes/api');
 const adminRounter = require('./routes/admin');
+const authRouter = require('./routes/auth');
 
 //MongoDB connection
 const mongoDb = `${process.env.DB_URI}`;
@@ -33,12 +36,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 //API Routes: these routes will be accessed by the front end app
-app.use('/api/users', usersRouter);
-app.use('/api/posts/', postRouter);
-app.use('/posts/:postid/comments', commentRounter);
+app.use('/api/', apiRouter);
 
-//All CMS routes to display backend views and
+//All CMS routes to display backend views
+//Use jwt passport strategy on /admin/ route
+//-- access from local storage
 app.use('/admin/', adminRounter);
+//Login and sign up routes
+app.use('/admin/', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
