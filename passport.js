@@ -1,11 +1,13 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcryptjs');
+require('dotenv').config();
 const passportJWT = require('passport-jwt');
-const JWTStrategy = passportJWT.Strategy;
-const ExtractJWT = passportJWT.ExtractJwt;
+const JwtStrategy = passportJWT.Strategy;
+const ExtractJwt = passportJWT.ExtractJwt;
 const User = require('./models/User');
 
-//Define passpprt local strategyn
+//Define passpprt local strategy
 passport.use(
     new LocalStrategy((username, password, done) => {
         User.findOne({ username: username }, (err, user) => {
@@ -25,20 +27,19 @@ passport.use(
 
 //Allow only requests with the appropriate token to use the route
 passport.use(
-    new JWTStrategy(
+    new JwtStrategy(
         {
-            jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+            jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
             secretOrKey: `${process.env.JWT_SECRET}`,
         },
-        function (jwtPayload, cb) {
-            //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
-            return User.findOneById(jwtPayload.id)
-                .then((user) => {
-                    return cb(null, user);
-                })
-                .catch((err) => {
-                    return cb(err);
-                });
+        async (token, done) => {
+            try {
+                console.log(token);
+                return done(null, token.user);
+            } catch (error) {
+                console.log(token);
+                return done(error);
+            }
         }
     )
 );
