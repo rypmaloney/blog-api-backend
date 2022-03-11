@@ -1,7 +1,7 @@
+require('dotenv').config();
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcryptjs');
-require('dotenv').config();
+
 const passportJWT = require('passport-jwt');
 const JwtStrategy = passportJWT.Strategy;
 const ExtractJwt = passportJWT.ExtractJwt;
@@ -29,7 +29,7 @@ passport.use(
 passport.use(
     new JwtStrategy(
         {
-            jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: `${process.env.JWT_SECRET}`,
         },
         async (token, done) => {
