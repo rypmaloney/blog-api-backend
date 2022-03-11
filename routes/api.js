@@ -4,7 +4,6 @@ const User = require('../models/User');
 const router = express.Router();
 
 /* GET users. */
-
 router.get('/users/', function (req, res, next) {
     User.find({}, 'username').exec(function (err, user_list) {
         if (err) {
