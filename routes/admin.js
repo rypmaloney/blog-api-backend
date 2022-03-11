@@ -12,16 +12,21 @@ router.get('/posts/new', function (req, res, next) {
     res.render('new_post', { title: 'Author a Post', errors: null });
 });
 
-/* GET all posts. */
+/* GET all posts */
 router.get('/posts', admin_controller.get_all_posts);
 
 /* POST new post */
 router.post('/posts/new/', admin_controller.post_new_post);
 
 /* UPDATE post */
+router.post('/posts/:id/update', admin_controller.post_update_post);
 
 /* DELETE post */
+router.delete('/posts/:id/delete', admin_controller.post_delete_post);
 
-/* UPDATE make post live*/
+/* GET all comments for a post */
 
+/* POST a new comment */
+
+/* DELETE comment */
 module.exports = router;

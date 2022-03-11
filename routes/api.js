@@ -2,6 +2,7 @@ const { useColors } = require('debug/src/browser');
 const express = require('express');
 const User = require('../models/User');
 const router = express.Router();
+const api_controller = require('../controllers/api_controller');
 
 /* GET users. */
 router.get('/users/', function (req, res, next) {
@@ -15,19 +16,14 @@ router.get('/users/', function (req, res, next) {
     });
 });
 
-router.get('/comments/', function (req, res, next) {
-    res.send('NOT CREATED - COMMENT GET ROUTE');
-});
-
-/* GET specific comment. */
-router.get('/comments/:commentid', function (req, res, next) {
-    res.send('NOT CREATED - COMMENT GET ROUTE FOR COMMENTID');
-});
-
 /* GET all posts. */
-router.get('/posts/', function (req, res, next) {
-    res.send('NOT CREATED - POST GET ROUTE');
-});
+router.get('/posts/', api_controller.get_all_posts);
+
+/* GET comments for a specific post */
+router.post('/posts/:id/comments/', api_controller.comment_list);
+
+/* POST a comment for a specific post */
+router.post('/posts/:id/comments/', api_controller.comment_create_post);
 
 /* GET specific post. */
 router.get('/posts/:postid', function (req, res, next) {
