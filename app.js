@@ -4,9 +4,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const bcryptjs = require('bcryptjs');
+var cors = require('cors');
+
+var corsOptions = {
+    origin: 'http://localhost:3001/',
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 require('dotenv').config();
 const mongoose = require('mongoose');
@@ -22,11 +25,12 @@ mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongo connection error'));
 
-var app = express();
+var corsOptions = {
+    origin: 'http://localhost:3001', //current ADMIN localhost
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+var app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -41,7 +45,7 @@ app.use('/api/', apiRouter);
 //All CMS routes to display backend views
 //Use jwt passport strategy on /admin/ route
 //-- access from local storage
-app.use('/admin/', adminRounter);
+app.use('/admin/', cors(corsOptions), adminRounter);
 //Login and sign up routes
 app.use('/admin/', authRouter);
 

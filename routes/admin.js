@@ -14,10 +14,7 @@ router.get('/posts/new', function (req, res, next) {
 });
 
 /* GET all posts */
-router.get('/posts/', [
-    passport.authenticate('jwt', { session: false }),
-    admin_controller.get_all_posts,
-]);
+router.get('/posts/', admin_controller.get_all_posts);
 
 /* GET all comments for a post (also returns post) */
 router.get('/posts/:id/', api_controller.comment_list);
