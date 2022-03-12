@@ -5,9 +5,11 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const Post = require('../models/Post');
 const { body, validationResult } = require('express-validator');
+var async = require('async');
+const Comment = require('../models/Comment');
 
 /* GET all posts for /posts/ */
-exports.get_all_posts = (req, res, next) => {
+exports.get_all_posts = (req, res) => {
     Post.find({}, 'title body_text user _id date')
         .populate('author')
         .exec(function (err, post_list) {
@@ -27,16 +29,16 @@ exports.comment_list = function (req, res, next) {
             comments: function (callback) {
                 Comment.find({ parent: req.params.id }).exec(callback);
             },
-            message: function (callback) {
-                Post.findById(req.params.id).populate('user').exec(callback);
+            posts: function (callback) {
+                Post.findById(req.params.id).populate('author').exec(callback);
             },
         },
         function (err, results) {
-            console.log(results.message);
+            console.log(results.posts);
             if (err) {
                 return next(err);
             }
-            if (results.message == null) {
+            if (results.posts == null) {
                 // No results.
                 var err = new Error('There is no post');
                 err.status = 404;
@@ -50,7 +52,7 @@ exports.comment_list = function (req, res, next) {
 /* POST new comment */
 exports.comment_create_post = [
     // Validate and sanitize fields.
-    body('comment', 'The actually post is required, buddy')
+    body('body', 'The actually post is required, buddy')
         .trim()
         .isLength({ min: 1 }),
     body('author', 'Who are you?').trim().isLength({ min: 1 }),
@@ -63,29 +65,18 @@ exports.comment_create_post = [
         // Create a message object with escaped and trimmed data.
         var comment = new Comment({
             parent: req.params.id,
-            body_text: req.body.comment,
+            body_text: req.body.body,
             date: new Date(),
-            user: req.author,
+            author: req.body.author,
         });
 
         if (!errors.isEmpty()) {
-            Post.findById(req.params.id)
-                .populate('user')
-                .exec(function (err, message) {
-                    if (err) {
-                        return next(err);
-                    }
-                    //Successful, so render
-                    res.json({
-                        errors: errors,
-                    });
-                    return;
-                });
+            res.json(errors);
         } else {
             // Data from form is valid. Save item.
             comment.save(function (err) {
                 if (err) {
-                    return next(err);
+                    res.json({ error: err });
                 }
                 //successful - redirect to new item record.
                 res.json(comment);

@@ -4,7 +4,7 @@ let Schema = mongoose.Schema;
 let commentSchema = new Schema({
     parent: { type: Schema.Types.ObjectId, ref: 'Post', required: true },
     body_text: { type: String, required: true },
-    user: { type: String, required: true },
+    author: { type: String, required: true },
     date: { type: Date, required: true },
 });
 

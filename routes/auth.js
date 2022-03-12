@@ -25,7 +25,7 @@ router.post('/log-in/', function (req, res, next) {
 
         req.login(user, { session: false }, (err) => {
             if (err) {
-                res.send(err);
+                res.json(err);
             }
 
             // generate a signed son web token with the contents of user object and return it in the response
