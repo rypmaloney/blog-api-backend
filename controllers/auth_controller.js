@@ -19,7 +19,7 @@ exports.create_new_user = [
     body('password', 'Password must not be empty.')
         .isLength({ min: 1 })
         .escape(),
-    body('password-reenter', "Please reenter you're password ")
+    body('passwordReenter', "Please reenter you're password ")
         .isLength({ min: 1 })
         .custom(async (confirmPassword, { req }) => {
             const password = req.body.password;

@@ -72,7 +72,7 @@ exports.post_update_post = [
 
         // Create a item object with escaped/trimmed data and old id.
         const post = new Post({
-            name: req.body.name,
+            title: req.body.title,
             body_text: req.body.body,
             _id: req.params.id,
         });
