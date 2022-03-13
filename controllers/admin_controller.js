@@ -8,7 +8,7 @@ const { body, validationResult } = require('express-validator');
 
 /* GET all posts for /posts/ */
 exports.get_all_posts = (req, res) => {
-    Post.find({}, 'title body_text user _id date')
+    Post.find({}, 'title body_text user _id date stage')
         .populate('author')
         .exec(function (err, post_list) {
             if (err) {
@@ -75,6 +75,7 @@ exports.post_update_post = [
             title: req.body.title,
             body_text: req.body.body,
             _id: req.params.id,
+            stage: req.body.stage,
         });
 
         if (!errors.isEmpty()) {
