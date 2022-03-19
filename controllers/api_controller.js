@@ -10,7 +10,7 @@ const Comment = require('../models/Comment');
 
 /* GET all posts for /posts/ */
 exports.get_all_posts = (req, res) => {
-    Post.find({}, 'title body_text user _id date')
+    Post.find({}, 'title body_text user _id date pinned')
         .populate('author')
         .exec(function (err, post_list) {
             if (err) {

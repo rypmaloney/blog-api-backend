@@ -8,6 +8,7 @@ let postSchema = new Schema({
     date: { type: Date, required: true },
     stage: { type: String, required: true },
     labels: [{ type: Schema.Types.ObjectId, ref: 'Label', required: false }],
+    pinned: { type: Boolean, required: false },
 });
 
 //Virtual for messages's URL

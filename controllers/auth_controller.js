@@ -93,6 +93,7 @@ exports.log_in_user = function (req, res, next) {
                 message: 'Something is not right',
                 user: user,
                 error: err,
+                info: info,
             });
         }
 
