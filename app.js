@@ -1,18 +1,21 @@
 require('./passport');
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
 
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-var indexRouter = require('./routes/index');
-var apiRouter = require('./routes/api');
+const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/api');
 const adminRounter = require('./routes/admin');
 const authRouter = require('./routes/auth');
+
+const compression = require('compression');
+const helmet = require('helmet');
 
 //MongoDB connection
 const mongoDb = `${process.env.DB_URI}`;
@@ -27,6 +30,8 @@ var corsOptions = {
 
 var app = express();
 
+app.use(helmet());
+app.use(compression());
 app.use(logger('tiny'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
