@@ -24,7 +24,7 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongo connection error'));
 
 var corsOptions = {
-    origin: 'https://rypmaloney.github.io/',
+    origin: 'https://rypmaloney.github.io',
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
