@@ -1,4 +1,4 @@
-#Blog API
+# Blog API
 
 This is a basic API I made in order to display blog posts on my portfolio. I feel my skill for writing has been atrophying (I haven't written much since I graduated college in 2016 with a degree in English Lit), so hopefully this will give me the means and motive to use that part of my brain. 
 
