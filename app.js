@@ -6,11 +6,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 
-var corsOptions = {
-    origin: 'http://localhost:3001/',
-    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
-
 require('dotenv').config();
 const mongoose = require('mongoose');
 
@@ -32,7 +27,7 @@ var corsOptions = {
 
 var app = express();
 
-app.use(logger('dev'));
+app.use(logger('tiny'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -42,9 +37,7 @@ app.use('/', indexRouter);
 //API Routes: these routes will be accessed by the front end app
 app.use('/api/', apiRouter);
 
-//All CMS routes to display backend views
-//Use jwt passport strategy on /admin/ route
-//-- access from local storage
+//All CMS routes to display backend views and post
 app.use('/admin/', cors(corsOptions), adminRounter);
 //Login and sign up routes
 app.use('/admin/', authRouter);

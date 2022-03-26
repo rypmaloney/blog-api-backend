@@ -1,10 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const Post = require('../models/Post');
-const { body, validationResult } = require('express-validator');
 const admin_controller = require('../controllers/admin_controller');
 const api_controller = require('../controllers/api_controller');
 

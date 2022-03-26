@@ -1,8 +1,4 @@
 require('dotenv').config();
-const express = require('express');
-const router = express.Router();
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
 const Post = require('../models/Post');
 const { body, validationResult } = require('express-validator');
 var async = require('async');
@@ -41,6 +37,12 @@ exports.comment_list = function (req, res, next) {
             if (results.posts == null) {
                 // No results.
                 var err = new Error('There is no post');
+                err.status = 404;
+                return next(err);
+            }
+            if (results.comments == null) {
+                // No results.
+                var err = new Error('There are no comments');
                 err.status = 404;
                 return next(err);
             }

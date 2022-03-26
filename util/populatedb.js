@@ -13,8 +13,8 @@ if (!userArgs[0].startsWith('mongodb')) {
 }
 */
 var async = require('async');
-var User = require('./models/User');
-var Post = require('./models/Post');
+var User = require('../models/User');
+var Post = require('../models/Post');
 require('dotenv').config();
 
 var mongoose = require('mongoose');

@@ -1,8 +1,4 @@
 require('dotenv').config();
-const express = require('express');
-const router = express.Router();
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
 const Post = require('../models/Post');
 const { body, validationResult } = require('express-validator');
 
@@ -10,6 +6,7 @@ const { body, validationResult } = require('express-validator');
 exports.get_all_posts = (req, res) => {
     Post.find({}, 'title body_text user _id date stage pinned')
         .populate('author')
+        .sort('-date')
         .exec(function (err, post_list) {
             if (err) {
                 return next(err);
@@ -24,7 +21,7 @@ exports.get_all_posts = (req, res) => {
 exports.post_new_post = [
     // Validate and sanitize fields.
     body('title', 'Title must not be empty.').isLength({ min: 1 }),
-    body('body', 'The actually post is required, buddy')
+    body('body', 'The actual post is required, buddy')
         .trim()
         .isLength({ min: 1 }),
 
@@ -33,7 +30,7 @@ exports.post_new_post = [
         // Extract the validation errors from a request.
         const errors = validationResult(req);
 
-        // Create a message object with escaped and trimmed data.
+        // Create a post object with escaped and trimmed data.
         const post = new Post({
             title: req.body.title,
             body_text: req.body.body,
@@ -46,7 +43,7 @@ exports.post_new_post = [
 
         if (!errors.isEmpty()) {
             //Successful, so render
-            res.json(errors);
+            res.status(401).json(errors);
             return;
         } else {
             // Data from form is valid. Save item.
@@ -63,15 +60,13 @@ exports.post_new_post = [
 /* Update Post at /post/:id/update/ */
 exports.post_update_post = [
     body('title', 'Title must not be empty.').isLength({ min: 1 }),
-    body('body', 'The actually post is required, buddy')
-        .trim()
-        .isLength({ min: 1 }),
+    body('body', 'The actual post is required.').trim().isLength({ min: 1 }),
 
     (req, res, next) => {
         // Extract the validation errors from a request.
         const errors = validationResult(req);
 
-        // Create a item object with escaped/trimmed data and old id.
+        // Create a post object with escaped/trimmed data and old id.
         const post = new Post({
             title: req.body.title,
             body_text: req.body.body,
@@ -81,8 +76,7 @@ exports.post_update_post = [
         });
 
         if (!errors.isEmpty()) {
-            // There are errors. Render form again with sanitized values/error messages.
-            //Successful, so render
+            // There are errors.
             res.status(401).json(errors);
             return;
         } else {
