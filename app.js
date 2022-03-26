@@ -24,7 +24,7 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongo connection error'));
 
 var corsOptions = {
-    origin: 'http://localhost:3001', //current ADMIN localhost
+    origin: 'https://rypmaloney.github.io/blog-cms/',
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
